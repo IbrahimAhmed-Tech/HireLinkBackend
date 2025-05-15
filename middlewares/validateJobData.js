@@ -21,7 +21,7 @@ const validateJobData = (req, res, next) => {
   }
 
 
-  next(); // proceed to the controller
+  next(); 
 };
 
 module.exports = validateJobData;

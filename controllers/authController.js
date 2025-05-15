@@ -2,14 +2,38 @@ const { createUser, authenticateUser } = require("../services/authService");
 const jwt = require("jsonwebtoken");
 
 const handleRegisterUser = async (req, res) => {
-    const { fullName, email, password, role } = req.body;
-
-    if (!fullName || !email || !password || !role) {
-        return res.status(400).json({ message: "All fields are required" });
-    }
+    const { formData } = req.body;
+    const {
+        fullName,
+        email,
+        password,
+        role,
+        skills,
+        expectedSalary,
+        companyName,
+        companyWebsite,
+        resume,
+        profilePicture,
+    } = formData;
+    
 
     try {
-        const result = await createUser({ fullName, email, password, role });
+        const result = await createUser({
+            fullName,
+            email,
+            password,
+            role,
+            profilePicture,
+            ...(role === "candidate" && {
+                skills,
+                expectedSalary,
+                resume
+            }),
+            ...(role === "hiringManager" && {
+                companyName,
+                companyWebsite,
+            }),
+        });
         return res.status(201).json(result);
     } catch (error) {
         const status = error.message === "User already exists" ? 409 : 500;
@@ -18,11 +42,12 @@ const handleRegisterUser = async (req, res) => {
 };
 
 const handleLoginUser = async (req, res) => {
+    
     try {
         const { email, password } = req.body;
         const user = await authenticateUser(email, password);
         if (!user) {
-            return res.status(404).json({ error: "User not found or invalid password" });
+            return res.status(401).json({ error: "Invalid email or password" });
         }
         const token = jwt.sign(
             {

@@ -2,7 +2,6 @@ const mongoose = require("mongoose");
 
 const connectMongoDB = (http, port) => {
     const mongoString = `mongodb+srv://${process.env.MONGO_USERNAME}:${process.env.MONGO_PASSWORD}@${process.env.MONGO_CLUSTER}/hirelinkdb?retryWrites=true&w=majority`;
-    // const mongoString = "mongodb://localhost:27017/MemesApp";
 
     mongoose.connect(mongoString)
         .then(() => {

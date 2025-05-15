@@ -1,7 +1,18 @@
 const bcrypt = require("bcryptjs");
 const User = require("../models/User");
 
-const createUser = async ({ fullName, email, password, role }) => {
+const createUser = async ({
+    fullName,
+    email,
+    password,
+    role,
+    skills,
+    expectedSalary,
+    companyName,
+    companyWebsite,
+    resume,
+    profilePicture,
+}) => {
     const existingUser = await User.findOne({ email });
     if (existingUser) {
         throw new Error("User already exists");
@@ -14,24 +25,38 @@ const createUser = async ({ fullName, email, password, role }) => {
         email,
         password: hashedPassword,
         role,
+        profilePicture,
     });
+
+    
+    if (role === "candidate") {
+        newUser.skills = skills;
+        newUser.expectedSalary = expectedSalary;
+        newUser.resume = resume;
+    }
+
+    if (role === "hiringManager") {
+        newUser.companyName = companyName;
+        newUser.companyWebsite = companyWebsite;
+    }
 
     await newUser.save();
     return { message: "User created successfully" };
 };
+  
 
 const authenticateUser = async (email, password) => {
     const user = await User.findOne({ email });
     if (!user) {
-        throw new Error("Invalid email or password");
+        return null;
     }
 
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-        throw new Error("Invalid email or password");
+        return null;
     }
 
-    return user; // return the actual Mongoose user object
+    return user; 
 };
 module.exports = {
     createUser,

@@ -6,6 +6,15 @@ const userSchema = new mongoose.Schema(
         email: { type: String, required: true, unique: true, lowercase: true, trim: true },
         password: { type: String, required: true },
         role: { type: String, enum: ["hiringManager", "candidate"], required: true },
+
+        skills: [{ type: String }],
+        expectedSalary: { type: String },
+
+        companyName: { type: String },
+        companyWebsite: { type: String },
+
+        resume: { type: String, default: "" },
+        profilePicture: { type: String, default: "" },
     },
     { timestamps: true }
 );

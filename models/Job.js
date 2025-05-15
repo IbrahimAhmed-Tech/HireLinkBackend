@@ -66,6 +66,9 @@ const jobSchema = new mongoose.Schema(
             type: String,
             enum: ["IT", "Marketing", "Engineering", "Healthcare", "Finance", "Other"],
         },
+        isUrgent: {
+            type: Boolean
+        },        
         applicants:{
             type: Number,
             default: 0
