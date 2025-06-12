@@ -8,8 +8,13 @@ const createJob = async (jobData) => {
 };
 
 const getJobs = async () => {
-    return await Job.find().sort({ postedDate: -1 });
+    const currentDate = new Date();
+    
+    return await Job.find({
+        applicationDeadline: { $gte: currentDate }
+    }).sort({ postedDate: -1 });
 };
+
 module.exports = {
     createJob,
     getJobs,

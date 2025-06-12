@@ -17,7 +17,7 @@ const handlePostJob = async (req, res) => {
 const handleFetchJobs = async (req, res) => {
     try {
         const jobs = await getJobs();
-        
+        console.log("jobs.length:-------",jobs.length);
         res.status(200).json({ success: true, jobs });
     } catch (error) {
         console.error("Error in fetchJobs:", error);
