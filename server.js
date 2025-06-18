@@ -21,5 +21,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/jobs", jobRoutes);
 app.use("/api/uploads", uploadRoutes);
 app.use("/api/reviews", reviewRoutes);
-
+app.get("/", (req, res) => {
+    res.send("🚀 HireLink Backend is Live!");
+});
 module.exports = app;
